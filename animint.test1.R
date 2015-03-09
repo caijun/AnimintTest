@@ -51,12 +51,25 @@ theme_opts <- list(theme(panel.grid.minor = element_blank(),
                          axis.title.x = element_blank(), 
                          axis.title.y = element_blank()))
 
-USpolygons <- map_data("state")
-USpolygons$subregion <- NULL
-USpolygons <- subset(USpolygons, region != "district of columbia")
-USpolygons$STATENAME = state_flu$STATENAME[match(USpolygons$region, state_flu$state)]
-# add state flu
+# USpolygons <- map_data("state")
+# USpolygons$subregion <- NULL
+# USpolygons <- subset(USpolygons, region != "district of columbia")
+# USpolygons$STATENAME = state_flu$STATENAME[match(USpolygons$region, state_flu$state)]
+
+# use US state polygons of coarse resolution to speed up
+library(rgdal)
+library(maptools)
 library(plyr)
+
+shape <- readOGR(dsn = "/Users/tonytsai/Documents/R/US/states", layer = "states")
+shape@data$id = rownames(shape@data)
+shape.polygons = fortify(shape, region = "id")
+state = join(shape.polygons, shape@data, by = "id")
+USpolygons <- subset(state[, c("long", "lat", "group", "order", "STATE_NAME")], 
+                     !STATE_NAME %in% c("Alaska", "Hawaii", "District of Columbia"))
+names(USpolygons)[5] <- "STATENAME"
+
+# add state flu
 map_flu <- ldply(unique(state_flu$WEEKEND), function(we) {
   df <- subset(state_flu, WEEKEND == we)
   df <- merge(USpolygons, df)
@@ -91,6 +104,5 @@ ts.line <- ggplot() +
 viz <- list(levelHeatmap = level.heatmap, stateMap = state.map, tsLine = ts.line, 
             title = "FluView")
 system.time(animint2dir(viz, out.dir = "FluView"))
-# options(github.username = "caijun", github.password = "CaiJun2046")
 # system.time(animint2gist(viz, out.dir = "FluView"))
 # Error: x$headers$`content-type` == "application/json; charset=utf-8" is not TRUE
