@@ -2,8 +2,6 @@
 Jun Cai  
 March 15, 2015  
 
-
-
 # Background
 
 [Animint]([https://github.com/tdhock/animint]) is an R package for making interactive animated data
