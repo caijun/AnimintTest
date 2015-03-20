@@ -1,6 +1,6 @@
 # AnimintTest
 
-Tests of animint project for Google Summmer of Code 2015 
+Tests of [animint project](https://github.com/rstats-gsoc/gsoc2015/wiki/Animint) for Google Summmer of Code 2015 
 
 ## Easy Test
 
