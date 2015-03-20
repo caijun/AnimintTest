@@ -1,15 +1,15 @@
 # AnimintTest
 
-Tests for Animint Package
+Tests of animint project for Google Summmer of Code 2015 
 
-## Test 1
+## Easy Test
 
 Use Animint package to visualize CDC FluView data. [Result](http://tonytsai.name/FluView/index.html)
 
-## Test 2
+## Medium Test
 
 Use Animint package to implement the demonstration of gradient descent algorithm of animation package. [Result](http://bl.ocks.org/caijun/raw/de9e0af9f5ce2ca3fb43/)
 
-## Test 3
+## Medium-Hard Test
 
 Write a testthat unit test for hjust text anchor based on the gradient descent viz. [Result](https://github.com/caijun/animint/blob/master/tests/testthat/test-hjust-text-anchor.R)
