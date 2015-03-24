@@ -13,3 +13,7 @@ Use Animint package to implement the demonstration of gradient descent algorithm
 ## Medium-Hard Test
 
 Write a testthat unit test for hjust text anchor based on the gradient descent viz. [Result](https://github.com/caijun/animint/blob/master/tests/testthat/test-hjust-text-anchor.R)
+
+# Hard Test
+
+Fix `hjust` aesthestic for `geom_text`, a bug that I uncovered while creating project tests. The animint package version has been updated to 2015.03.23. View [pull request](https://github.com/tdhock/animint/pull/43#issuecomment-85142849).
