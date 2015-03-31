@@ -1,8 +1,6 @@
 setwd("~/Documents/R/animint")
 
 library(cdcfluview)
-library(ggplot2)
-
 # retrieve state-level data from the CDC's FluView Portal
 state_flu <- get_state_data(2008:2014)
 # data clean
@@ -13,25 +11,25 @@ state_flu$WEEKEND <- as.Date(state_flu$WEEKEND, format = "%b-%d-%Y")
 max(state_flu$WEEKEND)
 state_flu <- subset(state_flu, WEEKEND <= as.Date("2015-02-28") & 
                       !STATENAME %in% c("District of Columbia", "New York City", 
-                                       "Puerto Rico", "Alaska", "Hawaii"))
+                                        "Puerto Rico", "Alaska", "Hawaii"))
 state <- data.frame(state = unique(state_flu$STATENAME))
 state$statename <- paste(state$state, "State")
-library(geoChina)
+if (!require(geoChina)) devtools::install_github("caijun/geoChina")
 latlng <- geocode(state$statename, api = "google", ocs = "WGS-84", output = "latlng", 
-        messaging = T)
+                  messaging = T)
 state <- cbind(state, latlng)
 # ascending order by latitude
 stateOrder <- state[with(state, order(lat)), "state"]
 
-### use animint to visualize CDC FluView data
+### visualize CDC FluView data by animint 
 library(animint)
 
 # activity level heatmap
 level.heatmap <- ggplot() + 
   geom_tile(data = state_flu, aes(x = WEEKEND, y = factor(STATENAME, level = stateOrder), 
-                                   fill = level, clickSelects = WEEKEND)) + 
+                                  fill = level, clickSelects = WEEKEND)) + 
   geom_tallrect(aes(xmin = WEEKEND - 3, xmax = WEEKEND + 3, clickSelects = WEEKEND), 
-                 data = state_flu, alpha = .5) + 
+                data = state_flu, alpha = .5) + 
   scale_x_date(expand = c(0, 0)) + 
   scale_fill_gradient2(low = "white", high = "red", breaks = 0:10) + 
   ylab("STATENAME (Ascending Order of Latitude)") + 
@@ -61,7 +59,7 @@ library(rgdal)
 library(maptools)
 library(plyr)
 
-shape <- readOGR(dsn = "/Users/tonytsai/Documents/R/US/states", layer = "states")
+shape <- readOGR(dsn = paste0(getwd(), "/data/"), layer = "states")
 shape@data$id = rownames(shape@data)
 shape.polygons = fortify(shape, region = "id")
 state = join(shape.polygons, shape@data, by = "id")
